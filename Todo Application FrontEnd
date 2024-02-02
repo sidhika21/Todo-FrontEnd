@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="mb-3">
+
+            <label for="exampleInputEmail1" class="form-label">Todo</label>
+            <input type="text" class="form-control" id="todoInput">
+        </div>
+        <button id="todoSubmit" class="btn btn-primary">Add Todo</button>
+
+        <hr>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Task</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody id="rowCont">
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            let count = 0;
+            let todos = [];
+
+            function handleDelete(btn) {
+                todos[btn.attr("value")] = null;
+                handleRepaint(todos)
+            }
+			
+			function handleEdit(btn){
+			btnType=$(btn).text()
+			
+			if(btnType=="Edit"){
+				$(btn).text("Save")
+				
+				const inputNode=$(`<input type="text" value="${$(btn).parent().prev().text()}"/>`)
+				$(btn).parent().prev().html(inputNode)
+				
+			}
+			else{
+				$(btn).text("Edit")
+				
+				const text=$(btn).parent().prev().children().val()
+				$(btn).parent().prev().html(text)
+				}
+				$(btn).parent().prev().text()
+			}
+				
+				
+            $("#rowCount").on("click",)
+
+
+            $("#todoSubmit").on("click", () => {
+                const task = $("#todoInput").val()
+                const tableRow = $("<tr></tr>")
+                const tableHead = $(`<th scope="row">${++count}</th>`)
+                const tableData = $(`<td>${task}</td>`)
+				const editTd=$('<td></td>')
+                const editBtn = $('<button class="btn btn-warning">Edit</button>');
+                const deleteBtn = $(`<td value=${count - 1}><button btnVal=${count - 1} class="btn btn-danger todoDelete">Delete</button></td>`)
+				
+
+                deleteBtn.on("click", () => {
+                    handleDelete(deleteBtn)
+                })
+				
+				editBtn.on("click", () => {
+                    handleEdit(editBtn)
+                })
+				
+				editTd.append(editBtn)
+				
+                tableRow.append(tableHead)
+                tableRow.append(tableData)
+                tableRow.append(editTd)
+                tableRow.append(deleteBtn)
+
+                $("#rowCont").append(tableRow)
+                todos.push(task);
+            })
+
+            function handleRepaint(todos) {
+                $("#rowCont").html("")
+                let count = 0
+                for (let indx = 0; indx < todos.length; indx++) {
+                    const val = todos[indx];
+                    if (val == null) continue;
+
+                    const task = $("#todoInput").val()
+                    const tableRow = $("<tr></tr>")
+                    const tableHead = $(`<th scope="row">${++count}</th>`)
+                    const tableData = $(`<td>${val}</td>`)
+                    const editBtn = $('<td><button class="btn btn-warning">Edit</button></td>')
+                    const deleteBtn = $(`<td value=${indx}><button btnVal=${indx} class="btn btn-danger todoDelete">Delete</button></td>`)
+
+                    deleteBtn.on("click", () => {
+                        handleDelete(deleteBtn)
+                    })
+
+                    tableRow.append(tableHead)
+                    tableRow.append(tableData)
+                    tableRow.append(editBtn)
+                    tableRow.append(deleteBtn)
+
+                    $("#rowCont").append(tableRow)
+                }
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
